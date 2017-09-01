@@ -1,0 +1,12 @@
+[package]
+name = "x11fs-rs"
+version = "0.1.0"
+authors = ["Adam <sector-f@users.noreply.github.com>"]
+
+[dependencies.xcb]
+version = "0.8.1"
+features = ["thread"]
+
+[dependencies]
+fuse_mt = "0.4.1"
+clap = "2.26.0"
