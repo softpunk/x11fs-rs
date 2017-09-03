@@ -10,3 +10,4 @@ features = ["thread"]
 [dependencies]
 fuse_mt = "0.4.1"
 clap = "2.26.0"
+libc = "0.2.30"

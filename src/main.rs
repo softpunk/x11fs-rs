@@ -1,5 +1,6 @@
 extern crate fuse_mt;
 extern crate xcb;
+extern crate libc;
 extern crate clap;
 
 use clap::{App, Arg};
@@ -10,7 +11,7 @@ mod x11fs;
 use x11fs::X11fs;
 
 fn main() {
-    let (conn, screen_num) = match xcb::Connection::connect(None) {
+    let (conn, _screen_num) = match xcb::Connection::connect(None) {
         Ok(c) => { c },
         Err(e) => {
             eprintln!("Could not connect to X server: {}", e);
