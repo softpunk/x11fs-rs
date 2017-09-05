@@ -1,8 +1,9 @@
 use fuse_mt::*;
-use libc::ENOSYS;
+use libc::{ENOSYS, ENOENT};
 use xcb;
 
 use std::path::Path;
+use std::ffi::OsString;
 
 pub struct X11fs {
     conn: xcb::Connection,
@@ -13,6 +14,35 @@ impl X11fs {
         X11fs {
             conn: c,
         }
+    }
+
+    pub fn list_windows(&self) -> Vec<String> {
+        // Iterators are cool
+        // Maybe I can get this to work later
+
+        // self.conn.get_setup().roots().flat_map(|screen| {
+        //     xcb::query_tree(&self.conn, screen.root()).get_reply().iter().flat_map(|tree| {
+        //         tree.children().iter().map(|window| {
+        //             format!("0x{:08x}", window)
+        //         })
+        //     })
+        // }).collect::<Vec<String>>()
+
+        let mut windows = Vec::new();
+        let setup = self.conn.get_setup();
+        for screen in setup.roots() {
+            match xcb::query_tree(&self.conn, screen.root()).get_reply() {
+                Ok(tree) => {
+                    for window in tree.children() {
+                        windows.push(format!("0x{:08x}", window));
+                    }
+                },
+                Err(_) => {
+                    continue;
+                },
+            }
+        }
+        windows
     }
 }
 
